@@ -130,7 +130,7 @@
     <div class="hero-body">
       <img src="static/images/teaser.png" alt="ColorTrigger Teaser" style="width:100%;">
       <h2 class="subtitle has-text-centered" style="margin-top: 10px;">
-        <b>Towards always-on sensing.</b> (a) High-res RGB video pipelines quickly exhaust power on edge AI systems &mdash; smart glasses typically sustain only 30&ndash;60 min of continuous recording. (b) <b>ColorTrigger</b> uses a low-power grayscale camera as an always-on monitor and sparsely triggers an RGB camera only when needed, enabling always-on video sensing on edge devices.
+        <b>Towards always-on sensing.</b> (a) High-res RGB video pipelines quickly exhaust power on edge AI systems, smart glasses typically sustain only 30&ndash;60 min of continuous recording. (b) <b>ColorTrigger</b> uses a low-power grayscale camera as an always-on monitor and sparsely triggers an RGB camera only when needed, enabling always-on video sensing on edge devices.
       </h2>
     </div>
   </div>
@@ -171,7 +171,7 @@
         <p class="has-text-centered" style="margin-top: 8px;"><b>(a) Performance vs. RGB ratio.</b> Only a small fraction of RGB frames is sufficient to achieve comparable performance.</p>
       </div>
       <div class="column is-one-third has-text-centered">
-        <img src="static/images/attention.png" alt="Temporal attention map" style="max-width:100%;">
+        <img src="static/images/attention.png" alt="Temporal attention map" style="max-width:86%;">
         <p class="has-text-centered" style="margin-top: 8px;"><b>(b) Temporal attention map.</b> CLS features from 30 consecutive frames reveal significant redundancy in adjacent frames.</p>
       </div>
     </div>
@@ -179,7 +179,7 @@
       <div class="column is-four-fifths">
         <div class="content has-text-justified">
           <p>
-            We uniformly insert RGB frames into an otherwise grayscale video stream and evaluate on StreamingBench using Qwen2.5-VL-7B. Results show that only a small fraction of RGB frames is sufficient to achieve comparable performance. This indicates substantial redundancy in the color dimension &mdash; many semantics such as action recognition, layout reasoning, and counting are largely color-independent, with chromatic detail benefiting only a subset of key moments.
+            We uniformly insert RGB frames into an otherwise grayscale video stream and evaluate on StreamingBench using Qwen2.5-VL-7B. Results show that only a small fraction of RGB frames is sufficient to achieve comparable performance. This indicates substantial redundancy in the color dimension, many semantics such as action recognition, layout reasoning, and counting are largely color-independent, with chromatic detail benefiting only a subset of key moments.
           </p>
         </div>
       </div>
@@ -207,8 +207,8 @@
             <b>ColorTrigger</b> is a <i>grayscale-always, color-on-demand</i> framework that treats color as an on-demand signal rather than a continuously sampled modality. It comprises two key components:
           </p>
           <ul>
-            <li><b>Causal Online Trigger:</b> Analyzes a sliding window of grayscale features to detect redundancy and novelty. A windowed grayscale affinity matrix captures recent temporal structure, and a lightweight quadratic program (QP) determines whether each frame warrants color activation &mdash; all in a strictly causal manner. A credit-budgeted controller regulates long-horizon color spending.</li>
-            <li><b>Dynamic Token Router:</b> Allocates asymmetric decoder capacity &mdash; grayscale frames follow a high-compression pathway (64 tokens) while triggered RGB frames follow a high-capacity pathway (256 tokens). The mixed sequence is reassembled in temporal order and fed directly to the frozen MLLM decoder.</li>
+            <li><b>Causal Online Trigger:</b> Analyzes a sliding window of grayscale features to detect redundancy and novelty. A windowed grayscale affinity matrix captures recent temporal structure, and a lightweight quadratic program (QP) determines whether each frame warrants color activation, all in a strictly causal manner. A credit-budgeted controller regulates long-horizon color spending.</li>
+            <li><b>Dynamic Token Router:</b> Allocates asymmetric decoder capacity, grayscale frames follow a high-compression pathway (64 tokens) while triggered RGB frames follow a high-capacity pathway (256 tokens). The mixed sequence is reassembled in temporal order and fed directly to the frozen MLLM decoder.</li>
           </ul>
           <p>
             The entire pipeline is <b>training-free</b>, strictly causal, and integrates seamlessly with frozen MLLMs, making it practical for energy-constrained always-on video sensing.
