@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="ColorTrigger: Grayscale-Guided Online Triggering for Always-On Streaming Video Sensing">
+  <meta property="og:title" content="ColorTrigger: Color When It Counts"/>
+  <meta property="og:description" content="A grayscale-always, color-on-demand framework achieving 91.6% of full-color performance with only 8.1% RGB frames."/>
+  <meta property="og:url" content="https://lvgd.github.io/ColorTrigger/"/>
+  <meta property="og:image" content="static/images/ColorTrigger.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+  <meta name="twitter:title" content="ColorTrigger: Color When It Counts">
+  <meta name="twitter:description" content="A grayscale-always, color-on-demand framework for efficient always-on streaming video sensing.">
+  <meta name="twitter:image" content="static/images/ColorTrigger.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="keywords" content="ColorTrigger, streaming video understanding, always-on sensing, grayscale, MLLM, CVPR 2026, edge AI, wearable AI">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>ColorTrigger | CVPR 2026</title>
+  <link rel="icon" type="image/jpeg" href="static/images/favicon.jpg">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+</head>
+<body>
+
+<!-- Hero / Title -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title">Color When It Counts: Grayscale-Guided Online Triggering for Always-On Streaming Video Sensing</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              Weitong Cai<sup>1</sup>,</span>
+            <span class="author-block">
+              Hang Zhang<sup>2</sup><sup>*</sup>,</span>
+            <span class="author-block">
+              Yukai Huang<sup>3</sup>,</span>
+            <span class="author-block">
+              Shitong Sun<sup>1</sup>,</span>
+            <br>
+            <span class="author-block">
+              Jiankang Deng<sup>4</sup>,</span>
+            <span class="author-block">
+              Songcen Xu<sup>5</sup>,</span>
+            <span class="author-block">
+              Jifei Song<sup>5</sup>,</span>
+            <span class="author-block">
+              Zhensong Zhang<sup>5</sup><sup>*</sup></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <sup>1</sup>Queen Mary University of London,
+              <sup>2</sup>Independent Researcher,
+              <sup>3</sup>Durham University,<br>
+              <sup>4</sup>Imperial College London,
+              <sup>5</sup>Huawei Noah's Ark Lab
+            </span>
+            <br>
+            <span class="eql-cntrb"><small><sup>*</sup>Corresponding authors</small></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block" style="font-weight:bold; color:#ff3860;">CVPR 2026</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- Arxiv PDF link -->
+              <span class="link-block">
+                <a href="#" target="_blank"
+                class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">
+                  <i class="fas fa-file-pdf"></i>
+                </span>
+                <span>Paper</span>
+                </a>
+              </span>
+
+              <!-- ArXiv abstract Link -->
+              <span class="link-block">
+                <a href="#" target="_blank"
+                class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">
+                  <i class="ai ai-arxiv"></i>
+                </span>
+                <span>arXiv</span>
+                </a>
+              </span>
+
+              <!-- Github link
+              <span class="link-block">
+                <a href="#" target="_blank"
+                class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Code (Coming Soon)</span>
+                </a>
+              </span>
+              -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Teaser -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="static/images/teaser.png" alt="ColorTrigger Teaser" style="width:100%;">
+      <h2 class="subtitle has-text-centered" style="margin-top: 10px;">
+        <b>Towards always-on sensing.</b> (a) High-res RGB video pipelines quickly exhaust power on edge AI systems &mdash; smart glasses typically sustain only 30&ndash;60 min of continuous recording. (b) <b>ColorTrigger</b> uses a low-power grayscale camera as an always-on monitor and sparsely triggers an RGB camera only when needed, enabling always-on video sensing on edge devices.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<!-- Abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Always-on sensing is essential for next-generation edge/wearable AI systems, yet continuous high-fidelity RGB video capture remains prohibitively expensive for resource-constrained mobile and edge platforms.
+            We present a new paradigm for efficient streaming video understanding: <i>grayscale-always, color-on-demand</i>.
+            Through preliminary studies, we discover that color is not always necessary. Sparse RGB frames suffice for comparable performance when temporal structure is preserved via continuous grayscale streams.
+            Building on this insight, we propose <b>ColorTrigger</b>, an online training-free trigger that selectively activates color capture based on windowed grayscale affinity analysis.
+            Designed for real-time edge deployment, ColorTrigger uses lightweight quadratic programming to detect chromatic redundancy causally, coupled with credit-budgeted control and dynamic token routing to jointly reduce sensing and inference costs.
+            On streaming video understanding benchmarks, ColorTrigger achieves <b>91.6%</b> of full-color baseline performance while using only <b>8.1%</b> RGB frames, demonstrating substantial color redundancy in natural videos and enabling practical always-on video sensing on resource-constrained devices.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Preliminary Studies -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Key Finding: Color Is Not Always Necessary</h2>
+      </div>
+    </div>
+    <div class="columns is-centered is-vcentered" style="margin-top: 0px;">
+      <div class="column is-one-third has-text-centered">
+        <img src="static/images/performance_Qwen.png" alt="Performance vs RGB ratio" style="max-width:100%;">
+        <p class="has-text-centered" style="margin-top: 8px;"><b>(a) Performance vs. RGB ratio.</b> Only a small fraction of RGB frames is sufficient to achieve comparable performance.</p>
+      </div>
+      <div class="column is-one-third has-text-centered">
+        <img src="static/images/attention.png" alt="Temporal attention map" style="max-width:100%;">
+        <p class="has-text-centered" style="margin-top: 8px;"><b>(b) Temporal attention map.</b> CLS features from 30 consecutive frames reveal significant redundancy in adjacent frames.</p>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            We uniformly insert RGB frames into an otherwise grayscale video stream and evaluate on StreamingBench using Qwen2.5-VL-7B. Results show that only a small fraction of RGB frames is sufficient to achieve comparable performance. This indicates substantial redundancy in the color dimension &mdash; many semantics such as action recognition, layout reasoning, and counting are largely color-independent, with chromatic detail benefiting only a subset of key moments.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Method / Framework -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Method</h2>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column">
+        <img src="static/images/framework.png" alt="ColorTrigger Framework" style="width:100%;">
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            <b>ColorTrigger</b> is a <i>grayscale-always, color-on-demand</i> framework that treats color as an on-demand signal rather than a continuously sampled modality. It comprises two key components:
+          </p>
+          <ul>
+            <li><b>Causal Online Trigger:</b> Analyzes a sliding window of grayscale features to detect redundancy and novelty. A windowed grayscale affinity matrix captures recent temporal structure, and a lightweight quadratic program (QP) determines whether each frame warrants color activation &mdash; all in a strictly causal manner. A credit-budgeted controller regulates long-horizon color spending.</li>
+            <li><b>Dynamic Token Router:</b> Allocates asymmetric decoder capacity &mdash; grayscale frames follow a high-compression pathway (64 tokens) while triggered RGB frames follow a high-capacity pathway (256 tokens). The mixed sequence is reassembled in temporal order and fed directly to the frozen MLLM decoder.</li>
+          </ul>
+          <p>
+            The entire pipeline is <b>training-free</b>, strictly causal, and integrates seamlessly with frozen MLLMs, making it practical for energy-constrained always-on video sensing.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Results: Streaming Video Benchmarks -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Results on Streaming Video Benchmarks</h2>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            We evaluate ColorTrigger on two popular streaming VideoQA benchmarks: StreamingBench and OVO-Bench. Following the streaming setting, ColorTrigger processes all historical frames accumulated up to the <i>current</i> timestamp when each question is posed, enabling real-time response without access to future content.
+          </p>
+          <p>
+            <b>StreamingBench.</b> ColorTrigger with 34.3% RGB frames scores 75.24, outperforming recent online model Dispider-7B and comparable to proprietary models such as Gemini 1.5 Pro (75.69), while surpassing GPT-4o (73.28) and Claude 3.5 Sonnet (72.44). Even with only <b>8.1%</b> RGB frames (91.9% reduction), our approach scores 70.72, showing an <b>8.64%</b> improvement over the grayscale-only baseline (62.08).
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <img src="static/images/table_streamingbench.png" alt="Table 1: StreamingBench Results" style="width:100%;">
+      </div>
+    </div>
+
+    <div class="columns is-centered" style="margin-top: 20px;">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            <b>OVO-Bench.</b> Our model with 33.1% RGB frames achieves an overall score of 52.5, outperforming almost all existing open-source online MLLMs. Notably, our Real-Time Visual Perception performance (65.2) shows an <b>11.4-point improvement</b> over the grayscale-only baseline (53.8), highlighting the importance of selectively introducing chromatic information at critical moments. Even with only 7.1% RGB frames (92.9% reduction), ColorTrigger maintains a competitive overall score of 50.4.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <img src="static/images/table_ovobench.png" alt="Table 2: OVO-Bench Results" style="width:100%;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Results: Offline Long Video -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Results on Offline Long Video Task</h2>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            On Video-MME, ColorTrigger with 37.6% RGB frames achieves an overall score of <b>66.1</b>, surpassing the full RGB baseline InternVL-3.5-8B at 65.6 while using 62.4% fewer chromatic frames. This demonstrates that our adaptive triggering mechanism not only reduces computational cost but can actually <b>improve performance</b> by focusing RGB capacity on semantically critical moments. Even with only 9.1% RGB frames, our model scores 62.8, a 5.5-point improvement over the grayscale-only baseline.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-three-fifths">
+        <img src="static/images/table_videomme.png" alt="Table 3: Video-MME Results" style="width:100%;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Ablation Study -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Ablation Study</h2>
+      </div>
+    </div>
+
+    <!-- Component Study -->
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            <b>Component Study.</b> At 8.1% RGB usage, our full model (<i>Grayscale + TrigRGB</i>) achieves 70.72, recovering <b>91.6%</b> of baseline performance. Removing continuous grayscale causes a 1.96-point drop, while replacing adaptive triggering with uniform sampling results in a 1.72-point degradation, demonstrating that both components are essential. At 34.3% RGB usage, our model scores 75.24 (97.5% recovery), consistently outperforming uniform sampling by 2.60 points.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-half">
+        <img src="static/images/table_componentstudy.png" alt="Table 4: Component Study" style="width:100%;">
+      </div>
+    </div>
+
+    <!-- Performance across RGB ratios -->
+    <div class="columns is-centered" style="margin-top: 30px;">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            <b>Performance across varying RGB frame ratios.</b> As target rate <i>r</i> increases from 0.05 to 1.0, overall accuracy increases monotonically, confirming that <i>color is beneficial but not always necessary</i>. Task-specific trends reveal heterogeneous color dependencies: Attribute Perception rapidly saturates at ~26% RGB ratio; Spatial Understanding remains largely flat (65.0&ndash;69.1%), indicating minimal chromatic information is needed; while Clips Summarization and Text-Rich Understanding exhibit gradual gains.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column">
+        <img src="static/images/performance_plot.png" alt="Performance across varying RGB frame ratios" style="width:100%;">
+      </div>
+    </div>
+
+    <!-- Token Efficiency -->
+    <div class="columns is-centered" style="margin-top: 30px;">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            <b>Token Efficiency Analysis.</b> By introducing Dynamic Token Router (DT) with 64 tokens for grayscale frames, our model reduces total visual tokens to only <b>31.1%</b> while scoring 70.72 (91.6% performance recovery). At 34.3% RGB usage, DT achieves 75.24 with 50.7% token consumption, closely matching the 256-token variant (76.32) that uses twice the computational resources.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-three-fifths">
+        <img src="static/images/table_tokeneffi.png" alt="Table 5: Token Efficiency Analysis" style="width:100%;">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Visualization -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Qualitative Example</h2>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-three-fifths">
+        <img src="static/images/visualization.png" alt="Qualitative visualization" style="width:100%;">
+        <p class="has-text-centered" style="margin-top: 8px;">
+          With only grayscale input, the MLLM fails to answer "What color is the SUV?" (incorrectly predicting "Blue"). <b>ColorTrigger</b> effectively triggers and captures the relevant RGB frames, enabling the model to correctly identify the answer as "Black".
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BibTeX -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{cai2026colortrigger,
+  title={Color When It Counts: Grayscale-Guided Online Triggering for Always-On Streaming Video Sensing},
+  author={Cai, Weitong and Zhang, Hang and Huang, Yukai and Sun, Shitong and Deng, Jiankang and Xu, Songcen and Song, Jifei and Zhang, Zhensong},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year={2026}
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
