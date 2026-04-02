@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(magick -density 300 framework_v33.pdf -quality 95 -flatten framework.png)",
+      "Bash(magick -density 300 performance_Qwen.pdf -quality 95 -flatten performance_Qwen.png)",
+      "Bash(magick -density 300 attention_map_v3.pdf -quality 95 -flatten attention.png)"
+    ]
+  }
+}
