@@ -9,11 +9,16 @@ Stdlib-only; no pip install needed in CI.
 from __future__ import annotations
 
 import datetime as dt
+import gzip
+import http.cookiejar
 import json
+import random
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
+import zlib
 from pathlib import Path
 
 DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "citations.json"
@@ -24,38 +29,96 @@ USER_AGENT = (
     "Chrome/121.0.0.0 Safari/537.36"
 )
 
+BROWSER_HEADERS = {
+    "User-Agent": USER_AGENT,
+    "Accept": (
+        "text/html,application/xhtml+xml,application/xml;q=0.9,"
+        "image/avif,image/webp,*/*;q=0.8"
+    ),
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
+    "Upgrade-Insecure-Requests": "1",
+}
+
 VALUE_RE = re.compile(r'class="gsc_rsb_std">(\d+)</td>')
 
+MAX_ATTEMPTS = 3
 
-def fetch(url: str) -> str:
-    req = urllib.request.Request(
-        url,
-        headers={
-            "User-Agent": USER_AGENT,
-            "Accept-Language": "en-US,en;q=0.9",
-        },
+
+def make_opener() -> urllib.request.OpenerDirector:
+    return urllib.request.build_opener(
+        urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar())
     )
-    with urllib.request.urlopen(req, timeout=20) as resp:
-        if resp.status != 200:
-            raise RuntimeError(f"HTTP {resp.status} for {url}")
-        return resp.read().decode("utf-8", errors="replace")
+
+
+def fetch(opener: urllib.request.OpenerDirector, url: str) -> str:
+    req = urllib.request.Request(url, headers=BROWSER_HEADERS)
+    with opener.open(req, timeout=30) as resp:
+        raw = resp.read()
+        encoding = resp.headers.get("Content-Encoding", "").lower()
+        if encoding == "gzip":
+            raw = gzip.decompress(raw)
+        elif encoding == "deflate":
+            raw = zlib.decompress(raw)
+        return raw.decode("utf-8", errors="replace")
+
+
+def warm_up(opener: urllib.request.OpenerDirector) -> None:
+    """Hit Scholar root to seed cookies (GSP, NID, …) before the real query."""
+    try:
+        fetch(opener, "https://scholar.google.com/")
+    except Exception:
+        pass
+
+
+def alt_url(url: str) -> str | None:
+    if "scholar.google.co.uk" in url:
+        return url.replace("scholar.google.co.uk", "scholar.google.com")
+    if "scholar.google.com" in url:
+        return url.replace("scholar.google.com", "scholar.google.co.uk")
+    return None
 
 
 def parse_metrics(html: str) -> tuple[int, int, int]:
-    """Return (citations_all, h_index_all, i10_index_all).
-
-    Scholar emits six <td class="gsc_rsb_std"> values, ordered:
-        citations_all, citations_recent,
-        h_index_all,   h_index_recent,
-        i10_index_all, i10_index_recent.
-    """
     nums = [int(m) for m in VALUE_RE.findall(html)]
     if len(nums) < 6:
         raise RuntimeError(
-            f"Expected 6 gsc_rsb_std values, got {len(nums)} — "
-            "page may be a CAPTCHA challenge or layout changed."
+            f"got {len(nums)} gsc_rsb_std values, expected 6 — "
+            "page is likely a CAPTCHA challenge"
         )
     return nums[0], nums[2], nums[4]
+
+
+def fetch_profile(profile: dict) -> tuple[int, int, int]:
+    """Try primary URL with cookies + retries; on persistent failure, swap mirror."""
+    urls = [profile["url"]]
+    if (alt := alt_url(profile["url"])) is not None:
+        urls.append(alt)
+
+    last_err = "no attempts made"
+    for url in urls:
+        opener = make_opener()
+        warm_up(opener)
+        for attempt in range(1, MAX_ATTEMPTS + 1):
+            try:
+                return parse_metrics(fetch(opener, url))
+            except urllib.error.HTTPError as e:
+                last_err = f"HTTP {e.code} on {url} (attempt {attempt}/{MAX_ATTEMPTS})"
+                if e.code in (403, 429) and attempt < MAX_ATTEMPTS:
+                    time.sleep(random.uniform(8, 22))
+                    continue
+                break
+            except (urllib.error.URLError, RuntimeError, ValueError) as e:
+                last_err = f"{type(e).__name__}: {e} on {url} (attempt {attempt}/{MAX_ATTEMPTS})"
+                if attempt < MAX_ATTEMPTS:
+                    time.sleep(random.uniform(5, 15))
+                    continue
+                break
+    raise RuntimeError(last_err)
 
 
 def main() -> int:
@@ -65,9 +128,8 @@ def main() -> int:
     snapshots: list[tuple[dict, dict]] = []
     for profile in data["profiles"]:
         try:
-            html = fetch(profile["url"])
-            citations, h_index, i10_index = parse_metrics(html)
-        except (urllib.error.URLError, RuntimeError, ValueError) as exc:
+            citations, h_index, i10_index = fetch_profile(profile)
+        except RuntimeError as exc:
             print(
                 f"[error] {profile['name']} ({profile['id']}): {exc}",
                 file=sys.stderr,
@@ -85,7 +147,6 @@ def main() -> int:
             )
         )
 
-    # All fetches succeeded — commit the snapshots to the data structure.
     for profile, entry in snapshots:
         history = profile.setdefault("history", [])
         if history and history[-1]["date"] == today:
