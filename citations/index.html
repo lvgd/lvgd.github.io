@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Citation Tracker · Weitong Cai</title>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-606JM40DZP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-606JM40DZP');
+  </script>
+
+  <link rel="icon" type="image/png" href="../images/icon_blue.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --text: #1f2328;
+      --muted: #656d76;
+      --border: rgba(15, 17, 21, 0.08);
+      --accent-a: #1772d0;
+      --accent-a-soft: rgba(23, 114, 208, 0.12);
+      --accent-b: #e8833a;
+      --accent-b-soft: rgba(232, 131, 58, 0.14);
+      --pos: #1f883d;
+      --pos-soft: rgba(31, 136, 61, 0.12);
+      --neg: #cf222e;
+      --neg-soft: rgba(207, 34, 46, 0.10);
+      --shadow: 0 1px 2px rgba(15, 17, 21, 0.04), 0 6px 18px rgba(15, 17, 21, 0.05);
+      --grid: rgba(15, 17, 21, 0.06);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1115;
+        --surface: #171a21;
+        --text: #e6e8eb;
+        --muted: #8b939c;
+        --border: rgba(255, 255, 255, 0.08);
+        --accent-a: #58a6ff;
+        --accent-a-soft: rgba(88, 166, 255, 0.16);
+        --accent-b: #f6a96b;
+        --accent-b-soft: rgba(246, 169, 107, 0.18);
+        --pos: #3fb950;
+        --pos-soft: rgba(63, 185, 80, 0.16);
+        --neg: #f85149;
+        --neg-soft: rgba(248, 81, 73, 0.14);
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+        --grid: rgba(255, 255, 255, 0.07);
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-feature-settings: 'cv11', 'ss01';
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: var(--accent-a);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+    a:hover { color: var(--accent-b); }
+    a:focus-visible {
+      outline: 2px solid var(--accent-a);
+      outline-offset: 2px;
+      border-radius: 3px;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: clamp(24px, 4vw, 56px) clamp(16px, 4vw, 32px) 80px;
+    }
+
+    .header { margin-bottom: 32px; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .back-link:hover { color: var(--accent-a); }
+
+    .header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 3.4vw, 30px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .header .subtitle {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .grid-profiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: clamp(20px, 2.6vw, 28px);
+      box-shadow: var(--shadow);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 4px rgba(15, 17, 21, 0.05), 0 12px 28px rgba(15, 17, 21, 0.08);
+    }
+
+    .profile-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .profile-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .profile-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .profile-a .profile-dot { background: var(--accent-a); }
+    .profile-b .profile-dot { background: var(--accent-b); }
+
+    .profile-link {
+      font-size: 13px;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .profile-link:hover { color: var(--accent-a); }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .metric-value {
+      font-size: clamp(28px, 4vw, 38px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      font-variant-numeric: tabular-nums;
+      animation: fadeIn 280ms ease both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(2px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      margin-top: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-variant-numeric: tabular-nums;
+    }
+    .delta.pos { color: var(--pos); background: var(--pos-soft); }
+    .delta.neg { color: var(--neg); background: var(--neg-soft); }
+    .delta.flat { color: var(--muted); background: var(--grid); }
+
+    .sparkline {
+      width: 100%;
+      height: 28px;
+      margin-top: 10px;
+      display: block;
+      overflow: visible;
+    }
+
+    .chart-card {
+      margin-bottom: 20px;
+    }
+
+    .chart-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      gap: 12px;
+    }
+
+    .chart-head h2 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .chart-head .chart-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+      height: 320px;
+    }
+    @media (max-width: 640px) {
+      .chart-wrap { height: 240px; }
+    }
+
+    .empty-state {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .footer-note {
+      margin-top: 32px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      text-align: center;
+    }
+    .footer-note a { color: var(--muted); text-decoration: underline; text-decoration-color: var(--border); }
+    .footer-note a:hover { color: var(--accent-a); text-decoration-color: var(--accent-a); }
+
+    .arrow {
+      display: inline-block;
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="header">
+      <a class="back-link" href="../"><span class="arrow">←</span> Weitong Cai</a>
+      <h1>Citation Tracker</h1>
+      <p class="subtitle" id="subtitle">Daily Google Scholar snapshots.</p>
+    </div>
+
+    <section class="grid-profiles" id="profileCards"></section>
+
+    <section class="card chart-card">
+      <div class="chart-head">
+        <h2>Total citations over time</h2>
+        <span class="chart-sub">All-time count, daily</span>
+      </div>
+      <div class="chart-wrap" id="citationsChartWrap">
+        <canvas id="citationsChart" aria-label="Citations time-series chart"></canvas>
+      </div>
+    </section>
+
+    <section class="card chart-card">
+      <div class="chart-head">
+        <h2>h-index &amp; i10-index over time</h2>
+        <span class="chart-sub">Solid: h-index · Dashed: i10-index</span>
+      </div>
+      <div class="chart-wrap" id="indicesChartWrap">
+        <canvas id="indicesChart" aria-label="h-index and i10-index time-series chart"></canvas>
+      </div>
+    </section>
+
+    <p class="footer-note">
+      Scraped daily at 03:17 UTC via GitHub Actions.
+      Source: <a href="../data/citations.json">data/citations.json</a>.
+    </p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/date-fns@3.6.0/cdn.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+  <script>
+    const PROFILE_COLORS = ['accent-a', 'accent-b'];
+
+    function cssVar(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue('--' + name).trim();
+    }
+
+    function fmtDate(iso) {
+      const d = new Date(iso + 'T00:00:00Z');
+      return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', timeZone: 'UTC' });
+    }
+
+    function deltaSummary(history, key) {
+      if (!history.length) return null;
+      const latest = history[history.length - 1][key];
+      if (history.length === 1) return { value: latest, delta: null };
+      const cutoff = new Date(history[history.length - 1].date);
+      cutoff.setUTCDate(cutoff.getUTCDate() - 30);
+      const cutoffISO = cutoff.toISOString().slice(0, 10);
+      let baseline = history[0];
+      let windowLabel = 'since start';
+      for (let i = history.length - 1; i >= 0; i--) {
+        if (history[i].date <= cutoffISO) {
+          baseline = history[i];
+          windowLabel = '30d';
+          break;
+        }
+      }
+      return {
+        value: latest,
+        delta: latest - baseline[key],
+        windowLabel
+      };
+    }
+
+    function renderDeltaPill(delta) {
+      if (!delta || delta.delta === null) return '';
+      const d = delta.delta;
+      let cls = 'flat';
+      let symbol = '—';
+      if (d > 0) { cls = 'pos'; symbol = '↑'; }
+      else if (d < 0) { cls = 'neg'; symbol = '↓'; }
+      const text = d === 0
+        ? `no change in ${delta.windowLabel}`
+        : `${symbol} ${Math.abs(d)} in ${delta.windowLabel}`;
+      return `<span class="delta ${cls}">${text}</span>`;
+    }
+
+    function renderSparkline(history, key, accent) {
+      if (history.length < 2) return '';
+      const values = history.map(h => h[key]);
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      const span = Math.max(max - min, 1);
+      const w = 100, h = 28;
+      const pts = values.map((v, i) => {
+        const x = values.length === 1 ? w / 2 : (i / (values.length - 1)) * w;
+        const y = h - ((v - min) / span) * (h - 4) - 2;
+        return `${x.toFixed(2)},${y.toFixed(2)}`;
+      });
+      const color = cssVar(accent);
+      const fill = cssVar(accent + '-soft');
+      const areaPts = `0,${h} ${pts.join(' ')} ${w},${h}`;
+      return `
+        <svg class="sparkline" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
+          <polygon points="${areaPts}" fill="${fill}" />
+          <polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      `;
+    }
+
+    function renderProfileCards(profiles) {
+      const container = document.getElementById('profileCards');
+      container.innerHTML = profiles.map((p, i) => {
+        const accent = PROFILE_COLORS[i % PROFILE_COLORS.length];
+        const klass = i === 0 ? 'profile-a' : 'profile-b';
+        const history = p.history || [];
+        const cit = deltaSummary(history, 'citations');
+        const h = deltaSummary(history, 'h_index');
+        const i10 = deltaSummary(history, 'i10_index');
+        const fmt = m => (m ? m.value.toLocaleString() : '—');
+        return `
+          <div class="card ${klass}">
+            <div class="profile-head">
+              <div class="profile-name">
+                <span class="profile-dot"></span>${p.name}
+              </div>
+              <a class="profile-link" href="${p.url}" target="_blank" rel="noopener">
+                Scholar <span class="arrow">↗</span>
+              </a>
+            </div>
+            <div class="metrics">
+              <div>
+                <div class="metric-label">Citations</div>
+                <div class="metric-value">${fmt(cit)}</div>
+                ${renderDeltaPill(cit)}
+                ${renderSparkline(history, 'citations', accent)}
+              </div>
+              <div>
+                <div class="metric-label">h-index</div>
+                <div class="metric-value">${fmt(h)}</div>
+                ${renderDeltaPill(h)}
+                ${renderSparkline(history, 'h_index', accent)}
+              </div>
+              <div>
+                <div class="metric-label">i10-index</div>
+                <div class="metric-value">${fmt(i10)}</div>
+                ${renderDeltaPill(i10)}
+                ${renderSparkline(history, 'i10_index', accent)}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function showEmpty(wrapId, message) {
+      const wrap = document.getElementById(wrapId);
+      wrap.innerHTML = `<div class="empty-state">${message}</div>`;
+    }
+
+    function commonChartOptions() {
+      const text = cssVar('text');
+      const muted = cssVar('muted');
+      const grid = cssVar('grid');
+      const surface = cssVar('surface');
+      const border = cssVar('border');
+      return {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: {
+            position: 'top',
+            align: 'end',
+            labels: {
+              color: text,
+              boxWidth: 10,
+              boxHeight: 10,
+              usePointStyle: true,
+              pointStyle: 'circle',
+              padding: 16,
+              font: { family: 'Inter', size: 12, weight: '500' }
+            }
+          },
+          tooltip: {
+            backgroundColor: cssVar('text'),
+            titleColor: surface,
+            bodyColor: surface,
+            borderColor: border,
+            borderWidth: 0,
+            padding: 10,
+            cornerRadius: 8,
+            displayColors: true,
+            boxWidth: 8,
+            boxHeight: 8,
+            usePointStyle: true,
+            titleFont: { family: 'Inter', weight: '600', size: 12 },
+            bodyFont: { family: 'Inter', size: 12 },
+            callbacks: {
+              title: items => fmtDate(items[0].parsed.x ? new Date(items[0].parsed.x).toISOString().slice(0, 10) : items[0].label)
+            }
+          }
+        },
+        scales: {
+          x: {
+            type: 'time',
+            time: { unit: 'day', tooltipFormat: 'PP', displayFormats: { day: 'MMM d' } },
+            grid: { display: false, drawBorder: false },
+            ticks: { color: muted, font: { family: 'Inter', size: 11 }, maxRotation: 0, autoSkipPadding: 16 }
+          },
+          y: {
+            grid: { color: grid, drawBorder: false },
+            ticks: { color: muted, font: { family: 'Inter', size: 11 }, padding: 8 },
+            beginAtZero: false
+          }
+        }
+      };
+    }
+
+    function buildCitationsChart(profiles) {
+      const ctx = document.getElementById('citationsChart').getContext('2d');
+      const datasets = profiles.map((p, i) => {
+        const accent = PROFILE_COLORS[i % PROFILE_COLORS.length];
+        const color = cssVar(accent);
+        const soft = cssVar(accent + '-soft');
+        return {
+          label: p.name,
+          data: (p.history || []).map(h => ({ x: h.date, y: h.citations })),
+          borderColor: color,
+          backgroundColor: soft,
+          fill: true,
+          tension: 0.3,
+          borderWidth: 2,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          pointHoverBorderColor: color,
+          pointHoverBackgroundColor: cssVar('surface'),
+          pointHoverBorderWidth: 2
+        };
+      });
+      const opts = commonChartOptions();
+      opts.scales.y.title = { display: true, text: 'Citations', color: cssVar('muted'), font: { family: 'Inter', size: 11, weight: '500' } };
+      new Chart(ctx, { type: 'line', data: { datasets }, options: opts });
+    }
+
+    function buildIndicesChart(profiles) {
+      const ctx = document.getElementById('indicesChart').getContext('2d');
+      const datasets = [];
+      profiles.forEach((p, i) => {
+        const accent = PROFILE_COLORS[i % PROFILE_COLORS.length];
+        const color = cssVar(accent);
+        const data = p.history || [];
+        datasets.push({
+          label: `${p.name} · h-index`,
+          data: data.map(h => ({ x: h.date, y: h.h_index })),
+          borderColor: color,
+          backgroundColor: 'transparent',
+          fill: false,
+          tension: 0.3,
+          borderWidth: 2,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          pointHoverBorderColor: color,
+          pointHoverBackgroundColor: cssVar('surface'),
+          pointHoverBorderWidth: 2
+        });
+        datasets.push({
+          label: `${p.name} · i10-index`,
+          data: data.map(h => ({ x: h.date, y: h.i10_index })),
+          borderColor: color,
+          backgroundColor: 'transparent',
+          borderDash: [5, 4],
+          fill: false,
+          tension: 0.3,
+          borderWidth: 2,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          pointHoverBorderColor: color,
+          pointHoverBackgroundColor: cssVar('surface'),
+          pointHoverBorderWidth: 2
+        });
+      });
+      const opts = commonChartOptions();
+      opts.scales.y.beginAtZero = true;
+      opts.scales.y.ticks.precision = 0;
+      new Chart(ctx, { type: 'line', data: { datasets }, options: opts });
+    }
+
+    async function init() {
+      let data;
+      try {
+        const res = await fetch('../data/citations.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        data = await res.json();
+      } catch (err) {
+        document.getElementById('profileCards').innerHTML =
+          `<div class="card"><div class="empty-state">Could not load citations data: ${err.message}</div></div>`;
+        showEmpty('citationsChartWrap', '');
+        showEmpty('indicesChartWrap', '');
+        return;
+      }
+
+      const profiles = data.profiles || [];
+      renderProfileCards(profiles);
+
+      const allHistory = profiles.flatMap(p => p.history || []);
+      const dates = allHistory.map(h => h.date).sort();
+      const latest = dates.length ? dates[dates.length - 1] : null;
+      const subtitle = document.getElementById('subtitle');
+      subtitle.textContent = latest
+        ? `Daily Google Scholar snapshots · last updated ${fmtDate(latest)} UTC`
+        : 'Daily Google Scholar snapshots.';
+
+      const maxLen = Math.max(0, ...profiles.map(p => (p.history || []).length));
+      if (maxLen === 0) {
+        showEmpty('citationsChartWrap', 'Collecting first snapshot — check back tomorrow.');
+        showEmpty('indicesChartWrap', 'Collecting first snapshot — check back tomorrow.');
+        return;
+      }
+      if (maxLen === 1) {
+        showEmpty('citationsChartWrap', 'One data point so far. The chart appears after the second daily run.');
+        showEmpty('indicesChartWrap', 'One data point so far. The chart appears after the second daily run.');
+        return;
+      }
+
+      buildCitationsChart(profiles);
+      buildIndicesChart(profiles);
+    }
+
+    init();
+  </script>
+</body>
+</html>

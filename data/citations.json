@@ -1,0 +1,30 @@
+{
+  "profiles": [
+    {
+      "id": "_1NDbv8AAAAJ",
+      "name": "Weitong Cai",
+      "url": "https://scholar.google.co.uk/citations?user=_1NDbv8AAAAJ&hl=en",
+      "history": [
+        {
+          "date": "2026-04-28",
+          "citations": 166,
+          "h_index": 5,
+          "i10_index": 3
+        }
+      ]
+    },
+    {
+      "id": "I7vCO0QAAAAJ",
+      "name": "Zhenyu Wang",
+      "url": "https://scholar.google.com/citations?user=I7vCO0QAAAAJ&hl=en",
+      "history": [
+        {
+          "date": "2026-04-28",
+          "citations": 166,
+          "h_index": 7,
+          "i10_index": 7
+        }
+      ]
+    }
+  ]
+}
