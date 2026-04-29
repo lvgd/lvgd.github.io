@@ -526,6 +526,8 @@
       });
       const opts = commonChartOptions();
       opts.scales.y.title = { display: true, text: 'Citations', color: cssVar('muted'), font: { family: 'Inter', size: 11, weight: '500' } };
+      opts.scales.y.ticks.precision = 0;
+      opts.scales.y.ticks.callback = function(value) { return Number.isInteger(value) ? value : ''; };
       new Chart(ctx, { type: 'line', data: { datasets }, options: opts });
     }
 
