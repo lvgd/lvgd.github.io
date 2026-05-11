@@ -1,3 +1,5 @@
 .DS_Store
 logs/
 .claude/
+launchd/
+scripts/update_scholar.py
