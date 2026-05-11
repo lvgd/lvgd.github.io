@@ -10,6 +10,7 @@
 logs/
 launchd/
 scripts/update_scholar.py
+files/
 
 # Python build cruft (in case any dir grows a script with deps)
 __pycache__/
