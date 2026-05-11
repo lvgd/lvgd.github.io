@@ -1,9 +1,10 @@
 name: Scrape Google Scholar
 
+# Scheduled run disabled: a launchd LaunchAgent on the Mac mini
+# (com.lvgd.scholar, scripts/update_scholar.sh) now handles the daily
+# refresh. Residential IPs aren't CAPTCHA'd by Scholar the way GitHub's
+# data-center IPs are. Keep workflow_dispatch as a manual fallback.
 on:
-  schedule:
-    - cron: '17 3 * * *'
-    - cron: '17 15 * * *'
   workflow_dispatch: {}
 
 permissions:
