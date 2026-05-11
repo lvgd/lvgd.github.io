@@ -119,11 +119,12 @@
       <div class="sort-tabs" id="sort-tabs">
         <button data-sort="fit" class="active">By fit</button>
         <button data-sort="deadline">By deadline</button>
+        <button data-sort="newest">By newest</button>
       </div>
     <div id="active-list"></div>
 
 
-  <footer>Auto-generated locally · 2026-05-11 01:10</footer>
+  <footer>Auto-generated locally · 2026-05-11 03:40</footer>
 </main>
 
 <script>
@@ -211,8 +212,12 @@ function bindListClicks(el) {
 function sortActive(mode) {
   const sorted = [...ACTIVE];
   const cdKey = j => j.closing_date || "9999-12-31";
+  const pdKey = j => j.posted_date || "0000-00-00";
   if (mode === "deadline") {
     sorted.sort((a, b) => cdKey(a).localeCompare(cdKey(b)) ||
+                          (b.llm_fit || 0) - (a.llm_fit || 0));
+  } else if (mode === "newest") {
+    sorted.sort((a, b) => pdKey(b).localeCompare(pdKey(a)) ||
                           (b.llm_fit || 0) - (a.llm_fit || 0));
   } else {
     sorted.sort((a, b) => (b.llm_fit || 0) - (a.llm_fit || 0) ||
