@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Open for applications · Job-W</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #f5f7fa;
+    --surface: #ffffff;
+    --border: #e2e6eb;
+    --text: #15192a;
+    --muted: #6b7280;
+    --accent: #0a66c2;
+    --accent-soft: #eff6ff;
+    --warn: #f59e0b;
+    --warn-soft: #fef3c7;
+    --danger: #dc2626;
+    --danger-soft: #fee2e2;
+    --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.04);
+  }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55; font-feature-settings: "tnum" 1; }
+  header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #f8fafc; padding: 22px 28px 24px 28px; }
+  header h1 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+  header .sub { margin-top: 4px; font-size: 13px; color: #94a3b8; }
+  header .back { display: inline-block; color: #94a3b8; font-size: 13px;
+    text-decoration: none; margin-bottom: 8px; }
+  header .back:hover { color: #f8fafc; }
+  main { max-width: 880px; margin: 0 auto; padding: 24px 20px 60px 20px; }
+  h2 { font-size: 14px; font-weight: 600; color: var(--muted);
+       margin: 0 0 12px 0; letter-spacing: 0.02em; }
+  h2 .hint { font-weight: 500; color: #9ca3af; margin-left: 8px;
+             font-size: 12px; letter-spacing: 0.04em; }
+
+  /* Job card */
+  .job-card { background: var(--surface); border: 1px solid var(--border);
+    border-left: 4px solid #cbd5e1;
+    border-radius: 8px; padding: 14px 16px 14px 14px; margin-bottom: 10px;
+    display: flex; align-items: flex-start; gap: 14px;
+    transition: border-color 0.12s; cursor: pointer; }
+  .job-card:hover { border-color: var(--accent); }
+  .job-card.is-new { border-left-color: var(--danger); }
+  .job-card.is-new:hover { border-left-color: var(--danger); }
+  .job-card .countdown { flex: 0 0 auto; min-width: 58px; text-align: center;
+    background: var(--danger-soft); color: var(--danger);
+    padding: 8px 6px; border-radius: 8px; font-weight: 700;
+    font-size: 11px; line-height: 1.15; }
+  .job-card .countdown .num { font-size: 19px; display: block; }
+  .job-card.warn .countdown { background: var(--warn-soft); color: var(--warn); }
+  .job-card.safe .countdown { background: var(--accent-soft); color: var(--accent); }
+  .job-card.expired .countdown { background: #f3f4f6; color: #9ca3af; }
+  .job-card .body { flex: 1; min-width: 0; }
+  .job-card .title { font-weight: 600; font-size: 15px; line-height: 1.35;
+    margin-bottom: 4px; }
+  .job-card .title a { color: var(--accent); text-decoration: none; }
+  .job-card .title a:hover { text-decoration: underline; }
+  .job-card .new-badge { display: inline-block; background: var(--danger);
+    color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 0.6px;
+    padding: 2px 7px; border-radius: 3px; margin-right: 8px;
+    vertical-align: 2px; }
+  .job-card.expired .new-badge { display: none; }  /* never NEW! on expired */
+  .job-card .employer-row { font-size: 13px; color: var(--text);
+    margin-bottom: 2px; line-height: 1.5; }
+  .job-card .employer-row b { font-weight: 600; }
+  .job-card .meta-icons { font-size: 12px; color: var(--muted);
+    line-height: 1.65; margin-bottom: 8px; }
+  .job-card .stars { color: var(--warn); }
+  .job-card .chevron { flex: 0 0 auto; align-self: center;
+    color: var(--muted); font-size: 14px; line-height: 1;
+    transition: transform 0.18s ease; user-select: none; padding: 2px 4px; }
+  .job-card.expanded .chevron { transform: rotate(180deg); color: var(--accent); }
+  .job-card .expansion { display: none; margin-top: 12px; padding-top: 12px;
+    border-top: 1px solid var(--border); font-size: 13.5px; line-height: 1.6; }
+  .job-card.expanded .expansion { display: block; }
+  .job-card .expansion .reason { margin-top: 8px; font-style: italic;
+    font-size: 12px; color: var(--muted); }
+  /* Expired styling — muted gray everywhere */
+  .job-card.expired { background: #fafafa; border-left-color: #e5e7eb; }
+  .job-card.expired .title a { color: #94a3b8; }
+  .job-card.expired .employer-row { color: #9ca3af; }
+  .job-card.expired .meta-icons,
+  .job-card.expired .meta-icons .stars { color: #b0b6bf; }
+
+  .section-divider { font-size: 12px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin: 32px 0 14px 0; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border); font-weight: 600; }
+  .sort-tabs { display: inline-flex; background: #eef2f7; padding: 3px;
+    border-radius: 8px; margin-bottom: 12px; }
+  .sort-tabs button { all: unset; cursor: pointer; padding: 6px 14px;
+    font-size: 13px; font-weight: 500; border-radius: 6px;
+    color: var(--muted); transition: all 0.15s; }
+  .sort-tabs button.active { background: var(--surface); color: var(--text);
+    box-shadow: 0 1px 2px rgba(15,23,42,0.08); }
+  .sort-tabs button:hover:not(.active) { color: var(--text); }
+
+  .empty-state { padding: 36px 20px; text-align: center; color: var(--muted);
+    background: var(--surface); border: 1px dashed var(--border); border-radius: 10px;
+    font-size: 13px; }
+
+  footer { text-align: center; font-size: 12px; color: var(--muted); margin-top: 32px; }
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← back to dashboard</a>
+  <h1>Open for applications</h1>
+  <div class="sub">32 roles still accepting applications</div>
+</header>
+
+<main>
+    <h2>Active</h2>
+      <div class="sort-tabs" id="sort-tabs">
+        <button data-sort="fit" class="active">By fit</button>
+        <button data-sort="deadline">By deadline</button>
+      </div>
+    <div id="active-list"></div>
+
+
+  <footer>Auto-generated locally · 2026-05-11 01:10</footer>
+</main>
+
+<script>
+const ACTIVE = [{"id": "1074501", "url": "https://www.jobs.ac.uk/job/DRL618/research-assistant-mixed-methods", "title": "Research Assistant (Mixed Methods)", "employer": "The University of Manchester", "department": "Biology, Medicine Health - Division of Psychology and Mental Health - School of Health Sciences", "location": "Manchester", "salary": "£32,080 to £34,610 per annum depending on experience", "posted_date": "2026-05-06", "closing_date": "2026-05-19", "snippet": "", "query": "ageing", "score": 531.0, "llm_decision": "KEEP", "llm_reason": "Research Assistant on family/parenting programme RCT; directly aligned social policy.", "llm_summary": "Research Assistant on RCT of Strengthening Families, Strengthening Communities parenting programme for parents of at-risk youth (10 months, June 2026 start). Directly targets family policy, parenting intervention, and youth crime prevention—core social policy domains. RCT methodology aligns with quantitative methods interests; Youth Endowment Fund-sponsored, ideal timing post-PhD graduation.", "llm_fit": 5, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074101", "url": "https://www.jobs.ac.uk/job/DRK447/postdoctoral-research-fellow-for-the-research-for-economic-security-and-peace-resp", "title": "Postdoctoral Research Fellow for the Research for Economic Security and Peace (RESP)", "employer": "University of Oxford", "department": "Blavatnik School of Government", "location": "Oxford", "salary": "£39,424 to £47,779 per annum", "posted_date": "2026-05-01", "closing_date": "2026-05-26", "snippet": "", "query": "social care", "score": 548.0, "llm_decision": "KEEP", "llm_reason": "Postdoc at government policy school; directly aligned with public administration interests.", "llm_summary": "Postdoctoral position at Blavatnik School of Government researching economic security and peace. Strong alignment with her public administration, governance, and public policy interests; positioned at one of her home institutions (Oxford) to develop independent research portfolio.", "llm_fit": 5, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074437", "url": "https://www.jobs.ac.uk/job/DRL493/associate-lecturer-teaching-in-quantitative-methods", "title": "Associate Lecturer (Teaching) in Quantitative Methods", "employer": "UCL", "department": "Department of Political Science and School of Public Policy", "location": "London, Hybrid", "salary": "£47,451 to £52,586 Grade 7", "posted_date": "2026-05-06", "closing_date": "2026-05-26", "snippet": "", "query": "social policy", "score": 536.0, "llm_decision": "KEEP", "llm_reason": "Associate Lecturer (Quantitative Methods) at Public Policy school; directly aligned interests.", "llm_summary": "Three-year Associate Lecturer position at UCL's Department of Political Science and School of Public Policy delivering quantitative methods teaching and developing independent research agenda. Directly aligned with interests in public administration, policy research, and applied computational methods—precisely the quantitative skillset she is developing. Designed specifically for fresh PhD graduates starting September 2026.", "llm_fit": 5, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1073735", "url": "https://www.jobs.ac.uk/job/DRJ444/arc-postdoctoral-researcher-age-well-theme", "title": "ARC Postdoctoral Researcher; Age Well Theme", "employer": "University of Oxford", "department": "Nuffield Department of Primary Care Health Sciences", "location": "Oxford, Hybrid", "salary": "£39,424 to £47,779 per annum with a discretionary range to £53,483 per annum (pro-rata). Grade 7", "posted_date": "2026-04-30", "closing_date": "2026-05-27", "snippet": "", "query": "long-term care", "score": 535.0, "llm_decision": "KEEP", "llm_reason": "Postdoc in ageing and long-term conditions; core research interest match.", "llm_summary": "ARC postdoctoral researcher in healthy ageing for older adults with multiple long-term conditions and frailty. Directly addresses her core interests in ageing, health policy, inequality, and implementation research. NIHR-funded, embedded within Oxford primary care research group, hybrid working.", "llm_fit": 5, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1073635", "url": "https://www.jobs.ac.uk/job/DRJ165/lse-fellow-in-international-social-and-public-policy", "title": "LSE Fellow in International Social and Public Policy", "employer": "London School of Economics and Political Science", "department": "Department of Social Policy", "location": "London", "salary": "£43,277 to £51,714 per annum inclusive with potential to progress to £55,497 pa inclusive of London allowance", "posted_date": "2026-05-06", "closing_date": "2026-05-31", "snippet": "", "query": "social welfare", "score": 541.0, "llm_decision": "KEEP", "llm_reason": "LSE Fellow in international social/public policy; core research area.", "llm_summary": "Career-development LSE Fellowship in international social and public policy at the Department of Social Policy. Direct match for her research interests with international dimension; world-renowned department. 2-year position starting September 2026, immediate post-graduation career pathway.", "llm_fit": 5, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1073411", "url": "https://www.jobs.ac.uk/job/DRI597/lse-fellow-in-economic-and-social-and-public-policy", "title": "LSE Fellow in Economic and Social and Public Policy", "employer": "London School of Economics and Political Science", "department": "Department of Social Policy", "location": "London", "salary": "£43,277 to £51,714 pa inclusive with potential to progress to £55,497 pa inclusive of London allowance", "posted_date": "2026-05-06", "closing_date": "2026-05-31", "snippet": "", "query": "social welfare", "score": 541.0, "llm_decision": "KEEP", "llm_reason": "LSE Fellow in social/public policy; direct core research interest match.", "llm_summary": "Career-development LSE Fellowship at the world-ranked Department of Social Policy in economic, social, and public policy. Direct match for her PhD research focus; LSE Social Policy rated 4th globally by QS. 2-year position starting September 2026, explicit entry-level pathway into academic career.", "llm_fit": 5, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074745", "url": "https://www.jobs.ac.uk/job/DRM244/research-and-innovation-coordinator-dementia-care-project", "title": "Research & Innovation Coordinator – Dementia Care Project", "employer": "Leeds Beckett University", "department": "Research & Enterprise Service", "location": "Leeds", "salary": "£32,000 to £35,000 depending on skills and experience", "posted_date": "2026-05-08", "closing_date": "2026-06-05", "snippet": "", "query": "social care", "score": 528.0, "llm_decision": "KEEP", "llm_reason": "KTP coordinator in dementia care; directly aligned with ageing and social care interests.", "llm_summary": "KTP coordinator implementing evidence-based Young Onset Dementia services for a dementia charity. Directly aligns with her interests in ageing, gerontology, long-term care, and social care policy. Fixed-term position at entry career-stage supporting practical social care innovation.", "llm_fit": 5, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1073769", "url": "https://www.jobs.ac.uk/job/DRJ522/postdoctoral-research-associate-fellow", "title": "Postdoctoral Research Associate / Fellow", "employer": "University of Exeter", "department": "Faculty of Health and Life Sciences", "location": "Exeter, Hybrid", "salary": "£34,610 to £43,482 per annum (pro rata if part-time) on Grade E for the Postdoctoral Research Associate level/Grade F for the Postdoctoral Research Fellow level, subject to knowledge, skills and experience.", "posted_date": "2026-04-29", "closing_date": "2026-05-13", "snippet": "", "query": "welfare research", "score": 446.0, "llm_decision": "KEEP", "llm_reason": "Mental health postdoc in health policy and intervention implementation; strong fit.", "llm_summary": "Postdoctoral position at University of Exeter implementing cognitive-behavioral therapy within NHS mental health support teams as scalable early intervention. Directly aligns with her interests in health policy, public health, and mental health service delivery innovation. Wellcome Trust-funded, immediate start, fixed-term contract to April 2027.", "llm_fit": 4, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1072615", "url": "https://www.jobs.ac.uk/job/DRG154/university-teacher-in-criminology", "title": "University Teacher in Criminology", "employer": "Loughborough University", "department": "School of Social Sciences and Humanities", "location": "Loughborough University, Loughborough", "salary": "Specialist and Supporting Academic grade 7 from £47,389 to £56,535.", "posted_date": "2026-04-20", "closing_date": "2026-05-17", "snippet": "", "query": "social welfare", "score": 410.0, "llm_decision": "KEEP", "llm_reason": "Entry-level academic in criminology/sociology; adjacent social policy domain.", "llm_summary": "University Teacher position in Criminology, Sociology and Social Policy at Loughborough, emphasizing teaching but with research participation. Located in department directly adjacent to her policy interests; criminology/sociology core to understanding social issues and governance. Starting August 2026.", "llm_fit": 4, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074580", "url": "https://www.jobs.ac.uk/job/DRL844/postdoctoral-researcher", "title": "Postdoctoral Researcher", "employer": "Birkbeck, University of London", "department": "School of Psychological Sciences", "location": "London", "salary": "£44,247 to £50,379 per annum. See advert text for details.", "posted_date": "2026-05-07", "closing_date": "2026-05-18", "snippet": "", "query": "ageing", "score": 442.0, "llm_decision": "KEEP", "llm_reason": "Postdoc in policy research centre on education policy; tangential to social policy.", "llm_summary": "22-month postdoc at policy research centre (50% Birkbeck, 50% UEA) translating educational neuroscience research into policy and practice. Education policy research is adjacent to social policy interests; explicit policy-into-practice mandate aligns with her interest in applied policy research. Large consortium including UCL, Oxford, Cambridge, and Bristol.", "llm_fit": 4, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074613", "url": "https://www.jobs.ac.uk/job/DRL903/behavioural-scientist-a-fairer-start", "title": "Behavioural Scientist (A Fairer Start)", "employer": "Nesta", "department": "", "location": "Blackfriars, London, Hybrid", "salary": "£38,600", "posted_date": "2026-05-07", "closing_date": "2026-05-26", "snippet": "", "query": "social policy", "score": 427.0, "llm_decision": "KEEP", "llm_reason": "Entry-level behavioural science role on child poverty and family policy innovation.", "llm_summary": "Permanent Behavioural Scientist role at Nesta (UK social innovation agency) supporting \"A Fairer Start\" mission: closing school readiness gap between children in poverty and national average through family support, home learning, and financial resilience interventions. Directly aligns with her interests in social policy, family policy, and inequality reduction. Salary £38,600; permanent (stability rare for entry-level); flexible working; hybrid (Blackfriars, London).", "llm_fit": 4, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074458", "url": "https://www.jobs.ac.uk/job/DRL532/summerhayes-fellow-fixed-term-two-years-to-complete-a-specific-task-or-time-limited-work", "title": "Summerhayes Fellow - Fixed Term (Two years - to complete a specific task or time limited work)", "employer": "University of Leeds", "department": "Faculty of Medicine & Health - Medicine & Health Faculty Office - Faculty Dean's Office", "location": "Leeds", "salary": "£41,064 to £48,822 per annum (Grade 7)", "posted_date": "2026-05-06", "closing_date": "2026-05-26", "snippet": "", "query": "health policy", "score": 426.0, "llm_decision": "KEEP", "llm_reason": "Postdoc explicitly designed for fresh PhDs; health inequalities directly relevant.", "llm_summary": "Two-year postdoctoral fellowship specifically for immediate post-PhD researchers at Leeds, focusing on health inequalities and disease prevention across interdisciplinary teams. Aligns with her interests in health policy, inequality, and public health; structured support for developing independent research profile.", "llm_fit": 4, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1073519", "url": "https://www.jobs.ac.uk/job/DRI955/intergrated-health-research-assistant-associate", "title": "Intergrated Health Research Assistant/Associate", "employer": "Newcastle University", "department": "Faculty of Medical Sciences", "location": "Newcastle upon Tyne", "salary": "£33,951 to £46,049 pro rata, per annum. See advert text for details.", "posted_date": "2026-04-28", "closing_date": "2026-05-26", "snippet": "", "query": "long-term care", "score": 423.0, "llm_decision": "KEEP", "llm_reason": "Entry-level health services research in integrated care and patient safety.", "llm_summary": "Health services research assistant/associate in patient safety and integrated health/social care for people with MLTCs. Aligns with her interests in health policy, social care integration, and applied research with stakeholder engagement across local authorities and NHS.", "llm_fit": 4, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074845", "url": "https://www.jobs.ac.uk/job/DRM395/research-fellow-in-applied-health-research", "title": "Research Fellow in Applied Health Research", "employer": "University of East Anglia", "department": "Faculty of Medicine and Health Sciences", "location": "Norwich", "salary": "£48,822 per annum (pro rata), dependent on skills and experience, with an annual increment up to £56,535 per annum (pro rata)", "posted_date": "2026-05-08", "closing_date": "2026-05-28", "snippet": "", "query": "social policy", "score": 440.0, "llm_decision": "KEEP", "llm_reason": "Applied health research fellow, family carers focus, knowledge mobilisation for impact.", "llm_summary": "Entry-level Research Fellow in NIHR Applied Research Collaboration (Mental Health and Wellbeing), co-leading regional family carer research network (ACORN) with knowledge mobilisation focus. Directly relevant to her interests in health policy, integrated care, and social care; KM/implementation links to her applied methods interests. Salary £48,822–£56,535; fixed-term; embedded in collaborative workstreams on implementation and research inclusion.", "llm_fit": 4, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1073454", "url": "https://www.jobs.ac.uk/job/DRI678/research-fellow-ai-for-addiction-and-mental-health-research", "title": "Research Fellow - AI for Addiction and Mental Health Research", "employer": "University of Hull", "department": "Centre for Addiction and Mental Health Research (CAMHR)", "location": "Kingston upon Hull", "salary": "£39,906 to £46,049", "posted_date": "2026-05-01", "closing_date": "2026-05-28", "snippet": "", "query": "long-term care", "score": 433.0, "llm_decision": "KEEP", "llm_reason": "Entry-level research fellow in applied health/AI research with policy relevance.", "llm_summary": "Research fellow combining AI/machine learning with health research on substance use and mental health in vulnerable populations. Aligns directly with her interests in health policy, applied computational methods, and inequality research. NIHR-funded, multi-institutional partnership (York, KCL, NHS/third-sector), significant innovation scope.", "llm_fit": 4, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074520", "url": "https://www.jobs.ac.uk/job/DRL743/research-assistant-associate-di-study", "title": "Research Assistant/Associate (DI Study)", "employer": "Newcastle University", "department": "", "location": "Newcastle upon Tyne", "salary": "£33,951 to £46,049 per annum. See advert text for details.", "posted_date": "2026-05-07", "closing_date": "2026-05-28", "snippet": "", "query": "ageing", "score": 432.0, "llm_decision": "KEEP", "llm_reason": "Research Assistant on school-based youth mental health intervention RCT; applied methods.", "llm_summary": "Research Assistant/Associate on DISCOVER Implementation Study—multi-site mixed-methods research on school-based mental health interventions for young people aged 16–18 years. School-based education policy combined with mental health focus aligns with public health interests; implementation research fits applied quantitative methods interests. NIHR-funded across five NHS regions with structured research training.", "llm_fit": 4, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1072430", "url": "https://www.jobs.ac.uk/job/DRF739/postdoctoral-research-associate", "title": "Postdoctoral Research Associate", "employer": "University of Exeter", "department": "Faculty of Health and Life Sciences", "location": "Exeter, Hybrid", "salary": "£34,610 to £39,906 per annum", "posted_date": "2026-04-16", "closing_date": "2026-05-14", "snippet": "", "query": "social welfare", "score": 333.0, "llm_decision": "KEEP", "llm_reason": "Postdoc in mental health research using participatory applied methods.", "llm_summary": "Postdoctoral researcher in mental health intervention research (rumination, CBT) using experimental studies and participatory methods with lived-experience participants. While clinical mental health rather than core ageing/policy, the co-designed, participatory research approach aligns with her interest in applied research methods.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074765", "url": "https://www.jobs.ac.uk/job/DRM274/lecturer-in-clinical-health-sciences", "title": "Lecturer in Clinical Health Sciences", "employer": "City St George’s, University of London", "department": "Department of Interprofessional Healthcare", "location": "London", "salary": "£51,753 to £53,301 per annum", "posted_date": "2026-05-08", "closing_date": "2026-05-17", "snippet": "", "query": "ageing", "score": 338.0, "llm_decision": "KEEP", "llm_reason": "Lecturer in health sciences; teaches health/public health education relevant to interests.", "llm_summary": "Teaching Lecturer in health sciences at Department of Interprofessional Healthcare, supporting students' transition into undergraduate health and medical sciences. Aligns with health policy and public health interests through health sciences education. Hybrid position at major London medical university.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074189", "url": "https://www.jobs.ac.uk/job/DRK920/research-associate-in-health-economics", "title": "Research Associate in Health Economics", "employer": "Newcastle University", "department": "School of Dental Sciences", "location": "Newcastle upon Tyne", "salary": "£36,636 to £46,049", "posted_date": "2026-05-05", "closing_date": "2026-05-19", "snippet": "", "query": "social care", "score": 337.0, "llm_decision": "KEEP", "llm_reason": "Research associate in health economics; applied quantitative methods and health policy.", "llm_summary": "Research associate position in health economics at Newcastle. Aligns with her interests in applied quantitative/computational methods, health policy, and economic dimensions of inequality and labour in healthcare.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1073786", "url": "https://www.jobs.ac.uk/job/DRJ545/postdoctoral-research-associate-in-neurodiversity", "title": "Postdoctoral Research Associate in Neurodiversity", "employer": "Durham University", "department": "Psychology", "location": "Durham", "salary": "£38,784 to £46,049", "posted_date": "2026-04-29", "closing_date": "2026-05-20", "snippet": "", "query": "social welfare", "score": 346.0, "llm_decision": "KEEP", "llm_reason": "Postdoc in safeguarding systems research; adjacent public administration.", "llm_summary": "Postdoctoral researcher in the Global Centre for Contextual Safeguarding examining systems-level public service delivery and safeguarding policy. While focused on youth welfare rather than ageing, the systems-level approach to governance and service innovation aligns with her public administration interests.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074486", "url": "https://www.jobs.ac.uk/job/DRL582/post-doctoral-research-fellow", "title": "Post Doctoral Research Fellow", "employer": "University of Greenwich", "department": "Livelihoods & Institutions", "location": "Kent", "salary": "£38,784 to £44,746 per annum", "posted_date": "2026-05-07", "closing_date": "2026-05-20", "snippet": "", "query": "social policy", "score": 339.0, "llm_decision": "KEEP", "llm_reason": "Postdoc on social inequality/labour in development; GBV/agricultural systems lens.", "llm_summary": "Postdoctoral Research Fellow at Natural Resources Institute examining gender-based violence in food systems (agricultural labour, value chains, food insecurity) using feminist, intersectional, decolonial approaches. Addresses social inequality, labour conditions, and social justice in development contexts; intersects with her interests in inequality, labour policy, and applied social science research. Salary £38,784–£44,746; fixed-term until March 2027; Medway Campus, Kent.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074471", "url": "https://www.jobs.ac.uk/job/DRL548/research-assistant", "title": "Research Assistant", "employer": "Queen Mary University of London", "department": "Centre for Psychiatry and Mental Health (CPMH)", "location": "London", "salary": "£38,419 to £39,022 pro-rata per annum", "posted_date": "2026-05-06", "closing_date": "2026-05-20", "snippet": "", "query": "social policy", "score": 331.0, "llm_decision": "KEEP", "llm_reason": "Research Assistant in mental health research, applied methods, health policy adjacent.", "llm_summary": "Research Assistant supporting ORChiD project on digital risks and resilience in children, conducting empirical research in schools and community settings. Aligns with health policy and public health interests through mental health research using applied research methods. Role includes mentorship to enhance methodological expertise.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074531", "url": "https://www.jobs.ac.uk/job/DRL758/associate-economist", "title": "Associate Economist", "employer": "National Institute of Economic and Social Research (NIESR)", "department": "Macro Team", "location": "London, Hybrid", "salary": "£35,000", "posted_date": "2026-05-08", "closing_date": "2026-05-20", "snippet": "", "query": "social policy", "score": 328.0, "llm_decision": "KEEP", "llm_reason": "Entry-level applied policy research with machine learning; leading policy institute.", "llm_summary": "Associate Economist at NIESR (leading UK policy research institute), contributing to macroeconomic modelling, forecasting, and analytical development using machine learning and advanced techniques. Combines her interests in applied computational methods (ML) with policy-relevant research on UK economy and fiscal conditions. Salary £35,000; hybrid working (avg 2 days/week remote); excellent benefits (30 days leave + USS pension); 35 hrs/week.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074683", "url": "https://www.jobs.ac.uk/job/DRM047/research-fellow", "title": "Research Fellow", "employer": "Ulster University", "department": "Administrative Data Research Centre / School of Psychology", "location": "Belfast, Coleraine", "salary": "£48,822", "posted_date": "2026-05-07", "closing_date": "2026-05-25", "snippet": "", "query": "social policy", "score": 339.0, "llm_decision": "KEEP", "llm_reason": "Research fellow in administrative data research; opportunity to lead data-driven policy studies.", "llm_summary": "Full-time Research Fellow conducting and leading research with linked administrative data at Northern Ireland ADRC, part of UK-wide safe data access partnership with ONS. Offers independence to develop data-driven policy research applicable to social policy, health, and public administration domains using population-scale datasets. Salary £48,822; fixed-term until April 2029 (3-year contract); full-time with research leadership opportunities.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074684", "url": "https://www.jobs.ac.uk/job/DRM048/research-associate-05-fte-x2-posts", "title": "Research Associate (0.5 FTE) x2 posts", "employer": "Ulster University", "department": "Administrative Data Research Centre / School of Psychology", "location": "Belfast, Coleraine", "salary": "£33,020 pro rata", "posted_date": "2026-05-07", "closing_date": "2026-05-25", "snippet": "", "query": "social policy", "score": 339.0, "llm_decision": "KEEP", "llm_reason": "Entry-level administrative data research methods applicable across policy domains.", "llm_summary": "Research Associate positions (0.5 FTE, 2 posts) conducting research with linked administrative data from UK Government bodies via ADRC–NI partnership (coordinated with national ADR networks and ONS). Administrative data methods are foundational to policy research in social policy, health services, public health. Salary £33,020 pro rata; fixed-term until April 2029 (3-year stability); choice of Belfast or Coleraine; 17.5 hrs/week.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1073311", "url": "https://www.jobs.ac.uk/job/DRI144/data-scientist", "title": "Data Scientist", "employer": "The Royal College of Surgeons of England", "department": "Macmillan/ National Cancer Audit Collaborating Centre (NATCAN)", "location": "London", "salary": "£39,984 to £51,872", "posted_date": "2026-04-24", "closing_date": "2026-05-25", "snippet": "", "query": "long-term care", "score": 314.0, "llm_decision": "KEEP", "llm_reason": "Entry-level data science in applied health services research; computational methods.", "llm_summary": "Data scientist at the National Cancer Audit Centre combining quantitative methods with health services improvement and cancer audit. Aligns with her interests in applied computational/data science methods in health policy research. 3-year fixed-term, remote working available.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074485", "url": "https://www.jobs.ac.uk/job/DRL580/departmental-lectureship-in-economic-and-social-history", "title": "Departmental Lectureship in Economic and Social History", "employer": "University of Oxford", "department": "Faculty of History", "location": "Oxford", "salary": "£39,424 to £41,636 per annum with an Oxford University Weighting of £1,750 per annum: Grade 7: 1-3", "posted_date": "2026-05-06", "closing_date": "2026-05-27", "snippet": "", "query": "social welfare", "score": 326.0, "llm_decision": "KEEP", "llm_reason": "Entry-level lectureship in economic and social history; adjacent social science.", "llm_summary": "Fixed-term departmental lectureship in economic and social history at Oxford. While history-focused, economic and social history intersects with policy scholarship on labour, inequality, and social structures. Teaching, research, and administrative responsibilities; 12-month position until Sept 2027.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074494", "url": "https://www.jobs.ac.uk/job/DRL604/policy-officer-for-the-what-works-hub-for-global-education-wwhge", "title": "Policy Officer for the What Works Hub for Global Education (WWHGE)", "employer": "University of Oxford", "department": "Blavatnik School of Government", "location": "Oxford", "salary": "£35,681 to £41,636 (with a discretionary range to £45,212) per annum, depending on experience", "posted_date": "2026-05-06", "closing_date": "2026-05-28", "snippet": "", "query": "social policy", "score": 326.0, "llm_decision": "KEEP", "llm_reason": "Policy officer at leading policy school; public policymaking and governance focus.", "llm_summary": "Fixed-term Policy Officer at Blavatnik School of Government (leading public policy research school), supporting What Works Hub for Global Education. Involves policy research and analysis on improving quality of government and public policymaking in education contexts. Aligns with her interests in public administration and governance; prestigious policy research environment. Salary £35,681–£45,212; fixed-term; Oxford; professional development opportunities.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074814", "url": "https://www.jobs.ac.uk/job/DRM347/lse-fellow-in-economic-geography", "title": "LSE Fellow in Economic Geography", "employer": "London School of Economics and Political Science", "department": "Department of Geography and Environment", "location": "London", "salary": "£43,277 to £51,714 per annum inclusive with potential to progress to £55,497 pa inclusive of London allowance", "posted_date": "2026-05-08", "closing_date": "2026-05-31", "snippet": "", "query": "pension", "score": 328.0, "llm_decision": "KEEP", "llm_reason": "Entry-level LSE fellowship in social science; tangentially relevant to labour, inequality, and applied quantitative methods.", "llm_summary": "An LSE Fellowship in Economic Geography at a world-leading department, offering a two-year fixed-term postdoctoral role starting September 2026. Economic geography provides analytical frameworks relevant to her interests in labour markets, inequality, and governance. Entry-level career development position aligned with fresh PhD transition to academia.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074483", "url": "https://www.jobs.ac.uk/job/DRL577/research-assistant-111615-0526", "title": "Research Assistant (111615-0526)", "employer": "University of Warwick", "department": "School of Law", "location": "Coventry, University of Warwick, Warwick", "salary": "£31,236 to £34,610 per annum", "posted_date": "2026-05-06", "closing_date": "2026-06-03", "snippet": "", "query": "health policy", "score": 331.0, "llm_decision": "KEEP", "llm_reason": "RA examining health data governance using qualitative research methods.", "llm_summary": "Research assistant at Centre of Global Health Law examining health data governance from marginalized communities' perspectives using qualitative methods. Aligns with her interests in health policy, governance, applied qualitative research, and understanding public/stakeholder perspectives on policy.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074701", "url": "https://www.jobs.ac.uk/job/DRM154/researcher-of-digital-health", "title": "Researcher of Digital Health", "employer": "University of Oxford", "department": "Nuffield Department of Primary Care Health Sciences", "location": "Oxford", "salary": "£39,424 to £43,984 per annum. Grade 7", "posted_date": "2026-05-08", "closing_date": "2026-06-03", "snippet": "", "query": "social care", "score": 328.0, "llm_decision": "KEEP", "llm_reason": "Research role examining AI in health services using mixed methods and public engagement.", "llm_summary": "Researcher examining AI Scribes in primary care using qualitative and quantitative methods, observations, interviews, and stakeholder engagement. Aligns with her interests in health policy, applied computational/quantitative methods, and understanding service delivery from public/stakeholder perspectives.", "llm_fit": 3, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}, {"id": "1074523", "url": "https://www.jobs.ac.uk/job/DRL746/research-assistant-associate-in-urban-knowledge-modelling", "title": "Research Assistant/Associate in Urban Knowledge Modelling", "employer": "Newcastle University", "department": "School of Engineering", "location": "Newcastle upon Tyne", "salary": "£33,951 to £46,049 per annum. See advert text for details.", "posted_date": "2026-05-07", "closing_date": "2026-05-21", "snippet": "", "query": "social policy", "score": 232.0, "llm_decision": "KEEP", "llm_reason": "Entry-level role emphasizing machine learning and deep learning for governance.", "llm_summary": "Research Assistant/Associate in Urban Knowledge Modelling (School of Engineering) developing Knowledge-Augmented Generation (KAG) framework for urban air quality governance, integrating qualitative textual data, quantitative simulations, and observational data using machine learning and deep learning. Emphasizes computational methods (ML, DL, LLMs via KAG) applied to environmental policy and governance decision-making. Salary £33,951–£46,049; full-time; Newcastle; bridges qualitative–quantitative divide.", "llm_fit": 2, "first_seen": "2026-05-10", "emailed_on": "2026-05-10"}];
+const EXPIRED = [];
+const TODAY = new Date("2026-05-11T00:00:00");
+
+function parseDate(s) { if (!s) return null;
+  const d = new Date(s + "T00:00:00"); return isNaN(d) ? null : d; }
+function daysUntil(d) { return Math.round((d - TODAY) / 86400000); }
+function stars(n) { n = Math.max(0, Math.min(5, n|0));
+  return "★".repeat(n) + "☆".repeat(5 - n); }
+function esc(s) { if (!s) return ""; return String(s).replace(/[&<>"']/g,
+  c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+function isNew(postedIso) {
+  if (!postedIso) return false;
+  const d = parseDate(postedIso);
+  if (!d) return false;
+  return (TODAY - d) / 86400000 <= 3;
+}
+
+function renderCard(j, isExpired) {
+  const cd = parseDate(j.closing_date);
+  const days = cd ? daysUntil(cd) : null;
+  let sev = "", cdLabel = "";
+  if (isExpired) {
+    sev = "expired";
+    cdLabel = j.closing_date || "—";
+  } else if (days === null) {
+    sev = "safe";
+    cdLabel = "—";
+  } else if (days <= 7) {
+    sev = "";
+    cdLabel = `${days}d`;
+  } else if (days <= 14) {
+    sev = "warn";
+    cdLabel = `${days}d`;
+  } else {
+    sev = "safe";
+    cdLabel = `${days}d`;
+  }
+  const itemNew = !isExpired && isNew(j.posted_date);
+  const newBadge = itemNew ? '<span class="new-badge">NEW!</span>' : "";
+
+  const metaBits = [];
+  if (j.location) metaBits.push(`📍 ${esc(j.location)}`);
+  if (j.salary) metaBits.push(`💷 ${esc(j.salary)}`);
+  if (j.posted_date) metaBits.push(`📅 Posted ${esc(j.posted_date)}`);
+  if (j.closing_date) metaBits.push(`⏳ Closes ${esc(j.closing_date)}`);
+  const metaIcons = metaBits.join(" · ");
+
+  return `
+    <div class="job-card expandable ${sev}${itemNew ? ' is-new' : ''}">
+      <div class="countdown">
+        ${isExpired
+          ? `<span class="num">·</span>expired`
+          : (days === null ? `<span class="num">·</span>open` :
+             `<span class="num">${days}</span>days`)}
+      </div>
+      <div class="body">
+        <div class="title">${newBadge}<a href="${esc(j.url)}" target="_blank" rel="noopener">${esc(j.title)}</a></div>
+        <div class="employer-row"><b>${esc(j.employer || "")}</b>${j.department ? " · " + esc(j.department) : ""} · <span class="stars">${stars(j.llm_fit || 0)}</span></div>
+        <div class="expansion">
+          ${metaIcons ? `<div class="meta-icons">${metaIcons}</div>` : ""}
+          ${j.llm_summary ? `<div>${esc(j.llm_summary)}</div>` : ""}
+          ${j.llm_reason ? `<div class="reason">🤖 ${esc(j.llm_reason)}</div>` : ""}
+        </div>
+      </div>
+      <div class="chevron">▾</div>
+    </div>`;
+}
+
+// Event delegation: one listener per list survives re-renders.
+function bindListClicks(el) {
+  if (!el || el.dataset.bound) return;
+  el.dataset.bound = "1";
+  el.addEventListener("click", e => {
+    if (e.target.closest("a")) return;
+    const card = e.target.closest(".job-card");
+    if (card) card.classList.toggle("expanded");
+  });
+}
+
+function sortActive(mode) {
+  const sorted = [...ACTIVE];
+  const cdKey = j => j.closing_date || "9999-12-31";
+  if (mode === "deadline") {
+    sorted.sort((a, b) => cdKey(a).localeCompare(cdKey(b)) ||
+                          (b.llm_fit || 0) - (a.llm_fit || 0));
+  } else {
+    sorted.sort((a, b) => (b.llm_fit || 0) - (a.llm_fit || 0) ||
+                          cdKey(a).localeCompare(cdKey(b)));
+  }
+  activeEl.innerHTML = sorted.map(j => renderCard(j, false)).join("");
+}
+
+const activeEl = document.getElementById("active-list");
+const expEl = document.getElementById("expired-list");
+if (activeEl) { sortActive("fit"); bindListClicks(activeEl); }
+if (expEl) { expEl.innerHTML = EXPIRED.map(j => renderCard(j, true)).join("");
+             bindListClicks(expEl); }
+
+const sortTabs = document.getElementById("sort-tabs");
+if (sortTabs) {
+  sortTabs.addEventListener("click", e => {
+    if (e.target.tagName !== "BUTTON") return;
+    sortTabs.querySelectorAll("button")
+      .forEach(b => b.classList.toggle("active", b === e.target));
+    sortActive(e.target.dataset.sort);
+  });
+}
+</script>
+</body>
+</html>
