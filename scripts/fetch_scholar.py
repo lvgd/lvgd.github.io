@@ -49,6 +49,28 @@ VALUE_RE = re.compile(r'class="gsc_rsb_std">(\d+)</td>')
 MAX_ATTEMPTS = 3
 
 
+def fill_missing_dates(history: list[dict]) -> int:
+    """Fill calendar gaps by carrying the previous snapshot forward."""
+    if len(history) < 2:
+        return 0
+
+    filled: list[dict] = [history[0]]
+    added = 0
+    for entry in history[1:]:
+        previous = filled[-1]
+        missing_date = dt.date.fromisoformat(previous["date"]) + dt.timedelta(days=1)
+        entry_date = dt.date.fromisoformat(entry["date"])
+        while missing_date < entry_date:
+            filled.append({**previous, "date": missing_date.isoformat()})
+            previous = filled[-1]
+            missing_date += dt.timedelta(days=1)
+            added += 1
+        filled.append(entry)
+
+    history[:] = filled
+    return added
+
+
 def make_opener() -> urllib.request.OpenerDirector:
     return urllib.request.build_opener(
         urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar())
@@ -153,11 +175,13 @@ def main() -> int:
             history[-1] = entry
         else:
             history.append(entry)
+        filled = fill_missing_dates(history)
         print(
             f"[ok] {profile['name']}: "
             f"citations={entry['citations']} "
             f"h={entry['h_index']} "
             f"i10={entry['i10_index']}"
+            + (f" (filled {filled} missing days)" if filled else "")
         )
 
     DATA_FILE.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
