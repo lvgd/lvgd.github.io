@@ -652,6 +652,12 @@
           "citations": 206,
           "h_index": 8,
           "i10_index": 8
+        },
+        {
+          "date": "2026-08-14",
+          "citations": 206,
+          "h_index": 8,
+          "i10_index": 8
         }
       ]
     },
@@ -1305,6 +1311,12 @@
         {
           "date": "2026-08-13",
           "citations": 192,
+          "h_index": 5,
+          "i10_index": 3
+        },
+        {
+          "date": "2026-08-14",
+          "citations": 195,
           "h_index": 5,
           "i10_index": 3
         }
