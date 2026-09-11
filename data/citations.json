@@ -808,6 +808,24 @@
           "citations": 211,
           "h_index": 8,
           "i10_index": 8
+        },
+        {
+          "date": "2026-09-09",
+          "citations": 211,
+          "h_index": 8,
+          "i10_index": 8
+        },
+        {
+          "date": "2026-09-10",
+          "citations": 211,
+          "h_index": 8,
+          "i10_index": 8
+        },
+        {
+          "date": "2026-09-11",
+          "citations": 213,
+          "h_index": 8,
+          "i10_index": 8
         }
       ]
     },
@@ -1616,6 +1634,24 @@
         },
         {
           "date": "2026-09-08",
+          "citations": 202,
+          "h_index": 5,
+          "i10_index": 3
+        },
+        {
+          "date": "2026-09-09",
+          "citations": 202,
+          "h_index": 5,
+          "i10_index": 3
+        },
+        {
+          "date": "2026-09-10",
+          "citations": 202,
+          "h_index": 5,
+          "i10_index": 3
+        },
+        {
+          "date": "2026-09-11",
           "citations": 202,
           "h_index": 5,
           "i10_index": 3
