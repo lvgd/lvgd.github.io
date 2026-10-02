@@ -46,6 +46,7 @@
     (() => {
       'use strict';
       const payload = JSON.parse(document.getElementById('encrypted-page').textContent);
+      const cacheKey = 'onitsuka:london:unlocked:v1';
       const form = document.getElementById('unlock-form');
       const input = document.getElementById('password');
       const button = document.getElementById('unlock');
@@ -56,6 +57,20 @@
         message.textContent = '請使用支援加密功能的瀏覽器，並透過 HTTPS 開啟此頁面。';
         button.disabled = true;
         return;
+      }
+
+      // Keep the temporary gate to one prompt per browser. The cached value is
+      // the already-rendered page, so the password itself is never stored.
+      try {
+        const cached = localStorage.getItem(cacheKey);
+        if (cached) {
+          document.open();
+          document.write(cached);
+          document.close();
+          return;
+        }
+      } catch (_) {
+        // Continue with the password form if storage is unavailable.
       }
 
       form.addEventListener('submit', async event => {
@@ -91,6 +106,7 @@
           input.focus();
           return;
         }
+        try { localStorage.setItem(cacheKey, html); } catch (_) {}
         input.value = '';
         document.open();
         document.write(html);
