@@ -46,12 +46,25 @@
     (() => {
       'use strict';
       const payload = JSON.parse(document.getElementById('encrypted-page').textContent);
-      const cacheKey = 'onitsuka:london:unlocked:v1';
+      const cacheKey = 'onitsuka:london:unlocked:v2';
       const form = document.getElementById('unlock-form');
       const input = document.getElementById('password');
       const button = document.getElementById('unlock');
       const message = document.getElementById('message');
       const decode = value => Uint8Array.from(atob(value), character => character.charCodeAt(0));
+      const render = html => {
+        const parsed = new DOMParser().parseFromString(html, 'text/html');
+        const replacement = document.importNode(parsed.documentElement, true);
+        document.documentElement.replaceWith(replacement);
+        // Scripts imported through DOMParser do not execute automatically.
+        // Recreate each one so the collection's filters and favourites work.
+        [...document.querySelectorAll('script')].forEach(oldScript => {
+          const script = document.createElement('script');
+          [...oldScript.attributes].forEach(attribute => script.setAttribute(attribute.name, attribute.value));
+          script.textContent = oldScript.textContent;
+          oldScript.replaceWith(script);
+        });
+      };
 
       if (!window.crypto || !window.crypto.subtle) {
         message.textContent = '請使用支援加密功能的瀏覽器，並透過 HTTPS 開啟此頁面。';
@@ -64,9 +77,7 @@
       try {
         const cached = localStorage.getItem(cacheKey);
         if (cached) {
-          document.open();
-          document.write(cached);
-          document.close();
+          render(cached);
           return;
         }
       } catch (_) {
@@ -108,9 +119,7 @@
         }
         try { localStorage.setItem(cacheKey, html); } catch (_) {}
         input.value = '';
-        document.open();
-        document.write(html);
-        document.close();
+        render(html);
       });
     })();
   </script>
