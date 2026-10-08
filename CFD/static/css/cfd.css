@@ -175,6 +175,7 @@ img { display: block; max-width: 100%; height: auto; }
   text-wrap: balance;
 }
 .author-block { display: inline-block; margin: 0 0.12rem; white-space: nowrap; }
+.authors-names a { color: var(--accent); }
 .author-block:not(:last-child)::after {
   content: "\00b7";
   margin-left: 0.48rem;
