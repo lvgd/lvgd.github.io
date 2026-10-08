@@ -42,7 +42,11 @@
   <a class="skip-link" href="#main-content">Skip to content</a>
   <nav class="nav-top" aria-label="Project navigation">
     <div class="nav-inner">
-      <a href="#top" class="nav-brand" aria-label="CFD, back to top">CFD</a>
+      <div class="nav-left">
+        <a href="../" class="nav-home">Home</a>
+        <span class="nav-sep" aria-hidden="true">/</span>
+        <a href="#top" class="nav-brand" aria-label="CFD, back to top">CFD</a>
+      </div>
       <div class="nav-links" aria-label="Page sections">
         <a href="#overview">Overview</a>
         <a href="#abstract">Abstract</a>
@@ -64,7 +68,7 @@
       <div class="venue-badge">EMNLP 2026 &middot; Main Conference &middot; Long Paper</div>
       <div class="authors-block">
         <p class="authors-names">
-          <span class="author-block"><a href="https://weitongcai.com/" target="_blank" rel="noopener">Weitong Cai</a><sup>1</sup></span>
+          <span class="author-block">Weitong Cai<sup>1</sup></span>
           <span class="author-block">Hang Zhang<sup>2*</sup></span>
           <span class="author-block">Yukai Huang<sup>3</sup></span>
           <span class="author-block">Yiqiao Xie<sup>4</sup></span>
@@ -212,12 +216,12 @@
 
       <h3 class="subsection-title">LVBench</h3>
       <p>
-        CFD achieves 52.9 overall, outperforming all agent-based systems that use open-source models and remaining competitive with the leading open-source MLLM AdaReTaKe-72B (53.3).
+        CFD achieves 52.9 overall, outperforming every agent-based system except VideoLucy (58.8), whose agent base model is the far larger DeepSeek-R1, and remaining competitive with the leading open-source MLLM AdaReTaKe-72B (53.3).
       </p>
       <div class="figure-block">
         <div class='table-scroll'><table class='paper-table'><thead><tr><th>Method</th><th>ER</th><th>EU</th><th>KIR</th><th>TG</th><th>Rea</th><th>Sum</th><th>Overall</th></tr></thead><tbody><tr class='grp'><td colspan='8'>Leading Open-source MLLMs</td></tr><tr><td>TimeMarker-8B</td><td>42.8</td><td>39.1</td><td>34.9</td><td>38.7</td><td>38.2</td><td>48.8</td><td>41.3</td></tr><tr><td>VideoLLaMA3-7B</td><td>45.8</td><td>42.4</td><td>47.8</td><td>35.9</td><td>45.8</td><td>36.2</td><td>45.3</td></tr><tr><td>InternVL2.5-78B</td><td>43.8</td><td>42.0</td><td>42.1</td><td>36.8</td><td>51.0</td><td>37.9</td><td>43.6</td></tr><tr><td>Qwen2-VL-72B</td><td>38.0</td><td>41.1</td><td>38.3</td><td>41.4</td><td>46.5</td><td>46.6</td><td>41.3</td></tr><tr><td>ReTake-7B</td><td>49.8</td><td>46.2</td><td>52.9</td><td>45.0</td><td>45.8</td><td>27.6</td><td>47.8</td></tr><tr><td>VideoChat-Flash-7B</td><td>51.1</td><td>46.0</td><td>49.0</td><td>38.9</td><td>48.5</td><td>34.5</td><td>48.2</td></tr><tr><td>AdaReTaKe-72B</td><td>53.0</td><td>50.7</td><td>62.2</td><td>45.5</td><td>54.7</td><td>37.9</td><td>53.3</td></tr><tr><td>InternVL3-8B</td><td>47.7</td><td>43.0</td><td>42.6</td><td>42.3</td><td>46.8</td><td>25.9</td><td>44.5</td></tr><tr class='grp'><td colspan='8'>Agent-based Systems</td></tr><tr><td>VideoAgent</td><td>28.0</td><td>30.3</td><td>28.0</td><td>29.3</td><td>28.0</td><td>36.4</td><td>29.3</td></tr><tr><td>VideoTree</td><td>30.3</td><td>25.1</td><td>26.5</td><td>27.7</td><td>31.9</td><td>25.5</td><td>28.8</td></tr><tr><td>MemVid</td><td>53.4</td><td>40.6</td><td>46.3</td><td>34.9</td><td>43.2</td><td>28.1</td><td>44.4</td></tr><tr><td>VCA</td><td>43.7</td><td>40.7</td><td>37.8</td><td>38.0</td><td>46.2</td><td>27.3</td><td>41.3</td></tr><tr class='muted'><td>VideoLucy&dagger;</td><td>54.3</td><td>59.8</td><td>75.6</td><td>51.7</td><td>55.9</td><td>49.1</td><td>58.8</td></tr><tr class='ours'><td>CFD (Ours)</td><td>53.9</td><td>50.2</td><td>63.9</td><td>48.2</td><td>48.3</td><td>37.9</td><td>52.9</td></tr></tbody></table></div>
         <div class="figure-caption">
-          ER: Entity Recognition; EU: Event Understanding; KIR: Key Information Retrieval; TG: Temporal Grounding; Rea: Reasoning; Sum: Summarization; Overall: average of the six. &dagger;&nbsp;Closed-source LLM as the agent base model.
+          ER: Entity Recognition; EU: Event Understanding; KIR: Key Information Retrieval; TG: Temporal Grounding; Rea: Reasoning; Sum: Summarization; Overall: average of the six. &dagger;&nbsp;Uses DeepSeek-R1 (671B-parameter MoE reasoning model) as the agent base model, versus the 32B Qwen3-VL reasoner in CFD.
         </div>
       </div>
     </section>
