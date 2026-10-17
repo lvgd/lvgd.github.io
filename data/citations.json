@@ -1036,6 +1036,12 @@
           "citations": 219,
           "h_index": 8,
           "i10_index": 8
+        },
+        {
+          "date": "2026-10-17",
+          "citations": 221,
+          "h_index": 9,
+          "i10_index": 8
         }
       ]
     },
@@ -2073,6 +2079,12 @@
         {
           "date": "2026-10-16",
           "citations": 224,
+          "h_index": 6,
+          "i10_index": 4
+        },
+        {
+          "date": "2026-10-17",
+          "citations": 225,
           "h_index": 6,
           "i10_index": 4
         }
