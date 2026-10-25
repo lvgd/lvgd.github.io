@@ -1,0 +1,17 @@
+# macOS / editor noise
+.DS_Store
+.idea/
+.vscode/
+
+# Tool / agent metadata
+.claude/
+
+# Local infra not relevant to the public site
+logs/
+launchd/
+scripts/update_scholar.py
+files/
+
+# Python build cruft (in case any dir grows a script with deps)
+__pycache__/
+*.pyc
